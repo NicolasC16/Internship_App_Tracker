@@ -12,4 +12,4 @@ YAHOO_IMAP_PORT = 993
 DATABASE_FILE = "internships.db"
 
 # How many recent emails to process
-INITIAL_SYNC_DAYS = 50
+INITIAL_EMAIL_LIMIT = 50
