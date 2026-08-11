@@ -47,8 +47,7 @@ def initialize_database():
                     recuriter_email TEXT,
                     next_action TEXT,
                     confidence REAL,
-                    last_updated TEXT,
-        )
+                    last_updated TEXT)
     """)
 
     connection.commit()
