@@ -107,6 +107,9 @@ def save_email(
         )
     )
 
+    connection.commit()
+    connection.close()
+
 def save_application(
         company,
         position,
