@@ -32,12 +32,12 @@ INTERNSHIP_KEYWORDS =  [
 
 def might_be_internship_email(email_data):
 
-    subject = (
+    subject = str(
         email_data["subject"]
         or ""
     )
 
-    body = (
+    body = str(
         email_data["body"]
         or ""
     )
@@ -51,7 +51,7 @@ def might_be_internship_email(email_data):
         if keyword in text:
             return True
         
-        return False
+    return False
 
 def process_email(email_data):
 
