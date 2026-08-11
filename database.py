@@ -37,14 +37,14 @@ def initialize_database():
         CREATE TABLE IF NOT EXISTS applications(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     company TEXT,
-                    positions TEXT,
+                    position TEXT,
                     location TEXT,
                     application_date TEXT,
                     status TEXT,
                     interview_date TEXT,
                     deadline TEXT,
                     recruiter_name TEXT,
-                    recuriter_email TEXT,
+                    recruiter_email TEXT,
                     next_action TEXT,
                     confidence REAL,
                     last_updated TEXT)
