@@ -65,7 +65,7 @@ def email_already_processed(message_id):
         FROM emails
         WHERE message_id = ?
         """,
-        (message_id)
+        (message_id,)
     )
 
     result = cursor.fetchone()
