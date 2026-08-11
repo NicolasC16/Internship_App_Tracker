@@ -268,9 +268,13 @@ def process_email(email_data):
     application_id = save_application(
         application["company"],
         application["position"],
+        application["location"],
         application["application_date"],
         application["status"],
         application["interview_date"],
+        application["deadline"],
+        application["recruiter_name"],
+        application["recruiter_email"],
         application["next_action"],
         application["confidence"],
         application["last_updated"]
