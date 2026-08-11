@@ -79,5 +79,5 @@ def parse_email(raw_email):
         "sender": msg.get("From"),
         "subject": msg.get("Subject"),
         "date": msg.get("Date"),
-        "body": get_email_body
+        "body": get_email_body(msg)
     }
