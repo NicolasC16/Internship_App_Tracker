@@ -65,7 +65,7 @@ class YahooMail:
                 "raw": raw_email
             })
 
-            return emails
+        return emails
 
     def close(self):
 
