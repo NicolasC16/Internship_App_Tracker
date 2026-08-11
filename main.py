@@ -44,6 +44,7 @@ STRONG_INTERNSHIP_KEYWORDS = [
     "application has been submitted",
 
     "thank you for applying to",
+    "thanks for applying to",
 
     "interview invitation",
     "interview scheduled",
