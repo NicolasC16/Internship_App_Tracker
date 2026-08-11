@@ -79,8 +79,7 @@ SUPPORTING_INTERNSHIP_KEYWORDS = [
     "assessment",
     "application",
     "offer",
-    "applying",
-    "Applying"
+    "applying"
 ]
 
 
@@ -105,7 +104,8 @@ NON_EMPLOYMENT_KEYWORDS = [
     "member portal",
     "donation",
     "fundraising",
-    "just posted"
+    "just posted",
+    "scholar"
 ]
 
 def might_be_internship_email(email_data):
