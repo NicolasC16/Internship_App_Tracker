@@ -43,6 +43,9 @@ STRONG_INTERNSHIP_KEYWORDS = [
     "application has been received",
     "application has been submitted",
 
+    "Thank you for Applying to",
+    "Thank you for applying to",
+
     "interview invitation",
     "interview scheduled",
 
@@ -73,7 +76,9 @@ SUPPORTING_INTERNSHIP_KEYWORDS = [
     "interview",
     "assessment",
     "application",
-    "offer"
+    "offer",
+    "applying",
+    "Applying"
 ]
 
 
@@ -97,7 +102,8 @@ NON_EMPLOYMENT_KEYWORDS = [
     "membership",
     "member portal",
     "donation",
-    "fundraising"
+    "fundraising",
+    "just posted"
 ]
 
 
