@@ -9,48 +9,164 @@ from database import (
 
 from config import INITIAL_EMAIL_LIMIT
 
-INTERNSHIP_KEYWORDS =  [
+# --------------------------------------
+# Internship / Employment Indicators
+# --------------------------------------
 
-    "intern",
+STRONG_INTERNSHIP_KEYWORDS = [
+
     "internship",
+    "intern position",
+    "intern role",
+    "intern/co-op",
+    "internship program",
 
     "software engineering intern",
-    "software engineering internship",
+    "software engineer intern",
+    "software development engineer intern",
 
-    "summer internship",
     "summer intern",
+    "summer internship",
 
-    "application",
-    "interview",
+    "recruiter",
+    "recruiting team",
+
+    "job application",
+    "employment application",
+
+    "application for the position",
+    "application for the role",
+
+    "application has been received",
+    "application has been submitted",
+
+    "interview invitation",
+    "interview scheduled",
+
+    "coding assessment",
+    "technical assessment",
+
+    "candidate for",
+    "candidate status",
+
+    "hiring team",
+    "hiring manager",
+
+    "offer letter",
+    "employment offer"
+]
+
+
+SUPPORTING_INTERNSHIP_KEYWORDS = [
+
+    "position",
+    "role",
+    "job",
+    "career",
+    "hiring",
     "candidate",
     "recruiter",
     "recruiting",
-    "hiring",
+    "interview",
     "assessment",
+    "application",
     "offer"
 ]
 
+
+# --------------------------------------
+# Known Non-Employment Topics
+# --------------------------------------
+
+NON_EMPLOYMENT_KEYWORDS = [
+
+    "scholarship",
+    "financial aid",
+    "student loan",
+    "housing",
+    "lease",
+    "rent",
+    "resident portal",
+    "apartment",
+    "roommate",
+    "bank account",
+    "credit card",
+    "membership",
+    "member portal",
+    "donation",
+    "fundraising"
+]
+
+
 def might_be_internship_email(email_data):
+    """
+    Determine whether an email is potentially
+    related to an internship or employment application.
+
+    This is only a first-stage filter.
+    The future AI layer will make the final determination.
+    """
 
     subject = str(
-        email_data["subject"]
+        email_data.get("subject")
         or ""
     )
 
     body = str(
-        email_data["body"]
+        email_data.get("body")
         or ""
     )
 
     text = (
-        subject + " " + body
+        subject
+        + "\n"
+        + body
     ).lower()
 
-    for keyword in INTERNSHIP_KEYWORDS:
+    # --------------------------------------
+    # Reject obvious non-employment emails
+    # --------------------------------------
+
+    for keyword in NON_EMPLOYMENT_KEYWORDS:
 
         if keyword in text:
-            return True
-        
+
+            return False
+
+    # --------------------------------------
+    # Strong employment indicators
+    # --------------------------------------
+
+    strong_matches = 0
+
+    for keyword in STRONG_INTERNSHIP_KEYWORDS:
+
+        if keyword in text:
+
+            strong_matches += 1
+
+    # One strong employment phrase is enough.
+    if strong_matches >= 1:
+
+        return True
+
+    # --------------------------------------
+    # Supporting indicators
+    # --------------------------------------
+
+    supporting_matches = 0
+
+    for keyword in SUPPORTING_INTERNSHIP_KEYWORDS:
+
+        if keyword in text:
+
+            supporting_matches += 1
+
+    # Require multiple supporting indicators.
+    if supporting_matches >= 3:
+
+        return True
+
     return False
 
 def process_email(email_data):
@@ -70,6 +186,7 @@ def process_email(email_data):
     )
 
     print(f"From: {parsed['sender']}")
+    print(f"Subject: {parsed['subject']}")
 
     #--------------------------------------
     # Duplicate Sender
