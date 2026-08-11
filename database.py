@@ -78,7 +78,8 @@ def save_email(
         message_id,
         sender,
         subject,
-        date_received
+        date_received,
+        application_id=None
 ):
 
     connection = get_connection()
@@ -92,15 +93,17 @@ def save_email(
             sender,
             subject,
             date_received,
-            processed
+            processed,
+            application_id
         )
-        VALUES (?, ?, ?, ?, 1)
+        VALUES (?, ?, ?, ?, 1, ?)
         """,
         (
             message_id,
             sender,
             subject,
-            date_received
+            date_received,
+            application_id
         )
     )
 
