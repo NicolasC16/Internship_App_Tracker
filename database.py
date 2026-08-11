@@ -104,5 +104,62 @@ def save_email(
         )
     )
 
+def save_application(
+        company,
+        position,
+        location,
+        application_date,
+        status,
+        interview_date,
+        deadline,
+        recruiter_name,
+        recruiter_email,
+        next_action,
+        confidence,
+        last_updated,
+):
+
+    connection = get_connection()
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO applications(
+        company,
+        position,
+        location,
+        application_date,
+        status,
+        interview_date,
+        deadline,
+        recruiter_name,
+        recruiter_email,
+        next_action,
+        confidence,
+        last_updated
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            company,
+            position,
+            location,
+            application_date,
+            status,
+            interview_date,
+            deadline,
+            recruiter_name,
+            recruiter_email,
+            next_action,
+            confidence,
+            last_updated,
+        )
+    )
+
+    application_id = cursor.lastrowid
+
     connection.commit()
     connection.close()
+
+    return application_id
