@@ -4,10 +4,13 @@ from email_parser import parse_email
 from database import (
     initialize_database,
     email_already_processed,
-    save_email
+    save_email,
+    save_application
 )
 
 from config import INITIAL_EMAIL_LIMIT
+
+from application_extractor import extract_application
 
 # --------------------------------------
 # Internship / Employment Indicators
@@ -229,6 +232,53 @@ def process_email(email_data):
     print("EMAIL PREVIEW")
 
     print(parsed["body"][:1000])
+
+    #---------------------------------------
+    # Extract Application Information
+    #---------------------------------------
+
+    application = extract_application(parsed)
+
+    print()
+
+    print("APPLICATION INFORMATION")
+
+    print(f"Company: {application['company']}")
+
+    print(f"Position: {application['position']}")
+
+    print(f"Status: {application['status']}")
+
+    print(
+        f"Application Date: "
+        f"{application['application_date']}"
+    )
+
+    #---------------------------------------
+    # Save Application
+    #---------------------------------------
+
+    application_id = save_application(
+        application["company"],
+        application["position"],
+        application["location"],
+        application["application_date"],
+        application["status"],
+        application["interview_date"],
+        application["deadline"],
+        application["recruiter_name"],
+        application["recruiter_email"],
+        application["next_action"],
+        application["confidence"],
+        application["last_updated"],
+    )
+
+    print()
+
+    print(
+        f"Application saved with ID: "
+        f"{application_id}"
+    )
 
     # Save it for now
     save_email(
