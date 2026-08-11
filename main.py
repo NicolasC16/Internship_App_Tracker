@@ -1,3 +1,5 @@
+import re
+
 from yahoo_mail import YahooMail
 from email_parser import parse_email
 
@@ -107,6 +109,13 @@ NON_EMPLOYMENT_KEYWORDS = [
 ]
 
 def might_be_internship_email(email_data):
+    """
+    Determine whether an email is potentially
+    related to an internship or employment application.
+
+    This is only a first-stage filter.
+    The future AI layer will make the final determination.
+    """
 
     subject = str(
         email_data.get("subject")
@@ -124,167 +133,49 @@ def might_be_internship_email(email_data):
         + body
     ).lower()
 
-    print()
-    print("========== KEYWORD DEBUG ==========")
-
-    print("SUBJECT:")
-    print(subject)
-
-    print()
-    print("NON-EMPLOYMENT MATCHES:")
-
-    non_employment_matches = []
+    # --------------------------------------
+    # Reject obvious non-employment emails
+    # --------------------------------------
 
     for keyword in NON_EMPLOYMENT_KEYWORDS:
 
-        if keyword.lower() in text:
+        if re.search(r"\b" + re.escape(keyword) + r"\b", text):
 
-            non_employment_matches.append(keyword)
+            return False
 
-    print(non_employment_matches)
+    # --------------------------------------
+    # Strong employment indicators
+    # --------------------------------------
 
-    print()
-    print("STRONG MATCHES:")
-
-    strong_matches = []
-
-    for keyword in STRONG_INTERNSHIP_KEYWORDS:
-
-        if keyword.lower() in text:
-
-            strong_matches.append(keyword)
-
-    print(strong_matches)
-
-    print()
-    print("SUPPORTING MATCHES:")
-
-    supporting_matches = []
-
-    for keyword in SUPPORTING_INTERNSHIP_KEYWORDS:
-
-        if keyword.lower() in text:
-
-            supporting_matches.append(keyword)
-
-    print(supporting_matches)
-
-    print()
-    print("====================================")
-
-    if non_employment_matches:
-
-        print(
-            "REJECTED BECAUSE OF:",
-            non_employment_matches
-        )
-
-        return False
-
-    if len(strong_matches) >= 1:
-
-        print("ACCEPTED: Strong keyword match")
-
-        return True
-
-    if len(supporting_matches) >= 3:
-
-        print("ACCEPTED: Supporting keyword match")
-
-        return True
-
-    print("REJECTED: Not enough employment keywords")
-
-    return False
-
-def might_be_internship_email(email_data):
-
-    subject = str(
-        email_data.get("subject")
-        or ""
-    )
-
-    body = str(
-        email_data.get("body")
-        or ""
-    )
-
-    text = (
-        subject
-        + "\n"
-        + body
-    ).lower()
-
-    print()
-    print("========== KEYWORD DEBUG ==========")
-
-    print("SUBJECT:")
-    print(subject)
-
-    print()
-    print("NON-EMPLOYMENT MATCHES:")
-
-    non_employment_matches = []
-
-    for keyword in NON_EMPLOYMENT_KEYWORDS:
-
-        if keyword.lower() in text:
-
-            non_employment_matches.append(keyword)
-
-    print(non_employment_matches)
-
-    print()
-    print("STRONG MATCHES:")
-
-    strong_matches = []
+    strong_matches = 0
 
     for keyword in STRONG_INTERNSHIP_KEYWORDS:
 
-        if keyword.lower() in text:
+        if keyword in text:
 
-            strong_matches.append(keyword)
+            strong_matches += 1
 
-    print(strong_matches)
+    # One strong employment phrase is enough.
+    if strong_matches >= 1:
 
-    print()
-    print("SUPPORTING MATCHES:")
+        return True
 
-    supporting_matches = []
+    # --------------------------------------
+    # Supporting indicators
+    # --------------------------------------
+
+    supporting_matches = 0
 
     for keyword in SUPPORTING_INTERNSHIP_KEYWORDS:
 
-        if keyword.lower() in text:
+        if keyword in text:
 
-            supporting_matches.append(keyword)
+            supporting_matches += 1
 
-    print(supporting_matches)
-
-    print()
-    print("====================================")
-
-    if non_employment_matches:
-
-        print(
-            "REJECTED BECAUSE OF:",
-            non_employment_matches
-        )
-
-        return False
-
-    if len(strong_matches) >= 1:
-
-        print("ACCEPTED: Strong keyword match")
+    # Require multiple supporting indicators.
+    if supporting_matches >= 3:
 
         return True
-
-    if len(supporting_matches) >= 3:
-
-        print("ACCEPTED: Supporting keyword match")
-
-        return True
-
-    print("REJECTED: Not enough employment keywords")
 
     return False
 
