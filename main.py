@@ -106,15 +106,7 @@ NON_EMPLOYMENT_KEYWORDS = [
     "just posted"
 ]
 
-
 def might_be_internship_email(email_data):
-    """
-    Determine whether an email is potentially
-    related to an internship or employment application.
-
-    This is only a first-stage filter.
-    The future AI layer will make the final determination.
-    """
 
     subject = str(
         email_data.get("subject")
@@ -132,167 +124,78 @@ def might_be_internship_email(email_data):
         + body
     ).lower()
 
-    # --------------------------------------
-    # Reject obvious non-employment emails
-    # --------------------------------------
+    print()
+    print("========== KEYWORD DEBUG ==========")
+
+    print("SUBJECT:")
+    print(subject)
+
+    print()
+    print("NON-EMPLOYMENT MATCHES:")
+
+    non_employment_matches = []
 
     for keyword in NON_EMPLOYMENT_KEYWORDS:
 
-        if keyword in text:
+        if keyword.lower() in text:
 
-            return False
+            non_employment_matches.append(keyword)
 
-    # --------------------------------------
-    # Strong employment indicators
-    # --------------------------------------
+    print(non_employment_matches)
 
-    strong_matches = 0
+    print()
+    print("STRONG MATCHES:")
+
+    strong_matches = []
 
     for keyword in STRONG_INTERNSHIP_KEYWORDS:
 
-        if keyword in text:
+        if keyword.lower() in text:
 
-            strong_matches += 1
+            strong_matches.append(keyword)
 
-    # One strong employment phrase is enough.
-    if strong_matches >= 1:
+    print(strong_matches)
 
-        return True
+    print()
+    print("SUPPORTING MATCHES:")
 
-    # --------------------------------------
-    # Supporting indicators
-    # --------------------------------------
-
-    supporting_matches = 0
+    supporting_matches = []
 
     for keyword in SUPPORTING_INTERNSHIP_KEYWORDS:
 
-        if keyword in text:
+        if keyword.lower() in text:
 
-            supporting_matches += 1
+            supporting_matches.append(keyword)
 
-    # Require multiple supporting indicators.
-    if supporting_matches >= 3:
+    print(supporting_matches)
+
+    print()
+    print("====================================")
+
+    if non_employment_matches:
+
+        print(
+            "REJECTED BECAUSE OF:",
+            non_employment_matches
+        )
+
+        return False
+
+    if len(strong_matches) >= 1:
+
+        print("ACCEPTED: Strong keyword match")
 
         return True
 
+    if len(supporting_matches) >= 3:
+
+        print("ACCEPTED: Supporting keyword match")
+
+        return True
+
+    print("REJECTED: Not enough employment keywords")
+
     return False
-
-def process_email(email_data):
-
-    parsed = parse_email(
-        email_data["raw"]
-    )
-
-    message_id = (
-        parsed["message_id"]
-    )
-
-    print()
-
-    print(
-        "-----------------------------------"
-    )
-
-    print(f"From: {parsed['sender']}")
-    print(f"Subject: {parsed['subject']}")
-
-    #--------------------------------------
-    # Duplicate Sender
-    #--------------------------------------
-
-    if email_already_processed(
-        message_id
-    ):
-
-        print("Already processed.")
-
-        return
-
-    #--------------------------------------
-    # Keyword Filtering
-    #--------------------------------------
-
-    if not might_be_internship_email(parsed):
-        print("Not an internship email.")
-
-        save_email(
-            message_id,
-            parsed["sender"],
-            parsed["subject"],
-            parsed["date"]
-        )
-
-        return
-
-    #---------------------------------------
-    # Potential Internship
-    #---------------------------------------
-
-    print(
-        "Potential internship email!"
-    )
-
-    print()
-
-    print("EMAIL PREVIEW")
-
-    print(parsed["body"][:1000])
-
-    #---------------------------------------
-    # Extract Application Information
-    #---------------------------------------
-
-    application = extract_application(parsed)
-
-    print()
-
-    print("APPLICATION INFORMATION")
-
-    print(f"Company: {application['company']}")
-
-    print(f"Position: {application['position']}")
-
-    print(f"Status: {application['status']}")
-
-    print(
-        f"Application Date: "
-        f"{application['application_date']}"
-    )
-
-    #---------------------------------------
-    # Save Application
-    #---------------------------------------
-
-    application_id = save_application(
-        application["company"],
-        application["position"],
-        application["location"],
-        application["application_date"],
-        application["status"],
-        application["interview_date"],
-        application["deadline"],
-        application["recruiter_name"],
-        application["recruiter_email"],
-        application["next_action"],
-        application["confidence"],
-        application["last_updated"],
-    )
-
-    print()
-
-    print(
-        f"Application saved with ID: "
-        f"{application_id}"
-    )
-
-    # Save it for now
-    save_email(
-        message_id,
-        parsed["sender"],
-        parsed["subject"],
-        parsed["date"]
-    )
 
 def main():
 
