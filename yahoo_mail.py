@@ -1,7 +1,7 @@
-"""This file is responsible for controlling the connection and 
-communication with Yahoo. It does not decode or evaluate the information within an email.
-Instead it takes the raw data from an email and shares it to the rest of the program
-for the data to be decoded and stored."""
+# This file is responsible for controlling the connection and 
+# communication with Yahoo. It does not decode or evaluate the information within an email.
+# Instead it takes the raw data from an email and shares it to the rest of the program
+# for the data to be decoded and stored.
 
 import imaplib
 

@@ -1,4 +1,5 @@
-""" This file is responsible for configuring the information needed to communicate with Yahoo."""
+# This file is responsible for configuring the information 
+# needed to communicate with Yahoo.
 
 import os
 from dotenv import load_dotenv
