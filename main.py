@@ -106,7 +106,6 @@ NON_EMPLOYMENT_KEYWORDS = [
     "fundraising",
     "just posted",
     "scholar",
-    "match",
     "linkedin"
 ]
 
