@@ -105,7 +105,9 @@ NON_EMPLOYMENT_KEYWORDS = [
     "donation",
     "fundraising",
     "just posted",
-    "scholar"
+    "scholar",
+    "match",
+    "linkedin"
 ]
 
 def might_be_internship_email(email_data):
